@@ -1,0 +1,6 @@
+<%= form_for @merchant url: "/merchant/discounts", local: true, method: :post do |f| %>
+  <%= f.label :discount %>
+  <%= f.number_field :discount%>
+
+  <%= f.submit('Create Discount') %>
+<% end %>
