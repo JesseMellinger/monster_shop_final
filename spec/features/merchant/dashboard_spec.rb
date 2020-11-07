@@ -78,5 +78,25 @@ RSpec.describe 'Merchant Dashboard' do
 
       expect(current_path).to eq("/merchant/discounts")
     end
+
+    it 'I see link to delete the curent bulk discount for my merchant' do
+      @merchant_1.update(discount: 20)
+      @merchant_1.reload
+
+      visit '/merchant'
+
+      click_link("Delete Discount")
+
+      expect(current_path).to eq('/merchant')
+
+      expect(@merchant_1.discount).to eq(0)
+    end
+
+    it 'I do not see a link to updater or delete a discount if a discount does not exist for a merchant' do
+      visit '/merchant'
+
+      expect(page).to_not have_link('Update Discount')
+      expect(page).to_not have_link('Delete Discount')
+    end
   end
 end

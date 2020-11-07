@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'as a merchant employee' do
-  describe 'when I visit the my discount index page' do
+  describe 'when I visit a new discount page' do
     before :each do
       @merchant_1 = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218, discount: 20)
       @merchant_2 = Merchant.create!(name: 'Brians Bagels', address: '125 Main St', city: 'Denver', state: 'CO', zip: 80218)
@@ -19,10 +19,17 @@ RSpec.describe 'as a merchant employee' do
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@m_user)
     end
 
-    it 'I see the discount for my merchant displayed' do
-      visit '/merchant/discounts'
+    it 'I can create a new discount for my merchant' do
+      visit '/merchant/discounts/edit'
 
-      expect(page).to have_content("Current Discount: #{@merchant_1.discount}")
+      fill_in 'Discount', with: 30
+
+      click_button("Update Discount")
+
+      @merchant_1.reload
+
+      expect(@merchant_1.discount).to eq(30)
+      expect(current_path).to eq('/merchant')
     end
   end
 end
