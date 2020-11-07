@@ -1,0 +1,6 @@
+<%= form_for @merchant, url: "/merchant/discounts", method: :patch do |f| %>
+  <%= f.label :discount %>
+  <%= f.number_field :discount %>
+
+  <%= f.submit(@merchant.discount.nil? ? 'Create Discount' : 'Update Discount') %>
+<% end %>
