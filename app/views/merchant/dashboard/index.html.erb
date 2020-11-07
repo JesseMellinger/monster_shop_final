@@ -5,6 +5,7 @@
 <%= link_to 'My Items', '/merchant/items' %><br>
 <%= link_to 'Create Discount', "/merchant/discounts/edit" if @merchant.discount.nil?%>
 <%= link_to 'Update Discount', "/merchant/discounts/edit" if !@merchant.discount.nil?%>
+<%= link_to 'View Discount', "/merchant/discounts" %>
 
 <section class="orders">
   <% @merchant.pending_orders.each do |order| %>
