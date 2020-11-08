@@ -27,11 +27,15 @@ RSpec.describe 'as a merchant employee' do
       within("#discount-#{@discount_1.id}") do
         expect(page).to have_content("Item Threshold: #{@discount_1.item_threshold}")
         expect(page).to have_content("Discount Value: #{@discount_1.value}")
+        expect(page).to have_link("Update Discount", :href=>"/merchant/discounts/#{@discount_1.id}/edit")
+        expect(page).to have_link("Delete Discount", :href=>"/merchant/discounts/")
       end
 
       within("#discount-#{@discount_2.id}") do
         expect(page).to have_content("Item Threshold: #{@discount_2.item_threshold}")
         expect(page).to have_content("Discount Value: #{@discount_2.value}")
+        expect(page).to have_link("Update Discount", :href=>"/merchant/discounts/#{@discount_2.id}/edit")
+        expect(page).to have_link("Delete Discount", :href=>"/merchant/discounts/")
       end
     end
   end
