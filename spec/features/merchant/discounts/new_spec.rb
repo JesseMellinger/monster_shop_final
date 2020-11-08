@@ -19,16 +19,29 @@ RSpec.describe 'as a merchant employee' do
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@m_user)
     end
 
-    it 'I can create a new discount for my merchant' do
-      visit '/merchant/discounts/edit'
+    it 'I can create a new discount for my merchant when item threshold and value given' do
+      visit '/merchant/discounts/new'
 
-      fill_in 'Discount', with: 20
+      fill_in 'Item threshold', with: 20
+      fill_in 'Value', with: 15.0
 
       click_button("Create Discount")
 
       @merchant_1.reload
 
-      expect(@merchant_1.discount).to eq(20)
+      expect(@merchant_1.discounts.first.item_threshold).to eq(20)
+      expect(@merchant_1.discounts.first.value).to eq(15.0)
+    end
+
+    it 'I am unable to create a new discount with the item threshold and value fields blank' do
+      visit '/merchant/discounts/new'
+
+      fill_in 'Item threshold', with: 20
+
+      click_button("Create Discount")
+
+      expect(current_path).to eq("/merchant/discounts/new")
+      expect(page).to have_content("Please fill in both fields")
     end
   end
 end
