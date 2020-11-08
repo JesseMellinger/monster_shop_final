@@ -21,22 +21,18 @@ RSpec.describe 'as a merchant employee' do
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@m_user)
     end
 
-    it 'I see the discount(s) for my merchant displayed' do
+    it 'I can delete a discount' do
       visit '/merchant/discounts'
 
       within("#discount-#{@discount_1.id}") do
-        expect(page).to have_content("Item Threshold: #{@discount_1.item_threshold}")
-        expect(page).to have_content("Discount Value: #{@discount_1.value}")
-        expect(page).to have_link("Update Discount", :href=>"/merchant/discounts/#{@discount_1.id}/edit")
-        expect(page).to have_link("Delete Discount", :href=>"/merchant/discounts/#{@discount_1.id}")
+        click_link("Delete Discount")
       end
 
-      within("#discount-#{@discount_2.id}") do
-        expect(page).to have_content("Item Threshold: #{@discount_2.item_threshold}")
-        expect(page).to have_content("Discount Value: #{@discount_2.value}")
-        expect(page).to have_link("Update Discount", :href=>"/merchant/discounts/#{@discount_2.id}/edit")
-        expect(page).to have_link("Delete Discount", :href=>"/merchant/discounts/#{@discount_2.id}")
-      end
+      expect(current_path).to eq("/merchant/discounts")
+
+      @merchant_1.reload
+
+      expect(@merchant_1.discounts.length).to eq(1)
     end
   end
 end
