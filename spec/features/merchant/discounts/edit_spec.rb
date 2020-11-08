@@ -34,5 +34,62 @@ RSpec.describe 'as a merchant employee' do
       expect(@discount_1.value).to eq(15.0)
       expect(current_path).to eq('/merchant')
     end
+
+    it 'I receive an error message if I input a data type other than an integer into item threshold' do
+      visit "/merchant/discounts/#{@discount_1.id}/edit"
+
+      fill_in 'Item threshold', with: 30.4
+
+      click_button("Update Discount")
+
+      @discount_1.reload
+
+      expect(page).to have_content("Item threshold must be an integer")
+
+      fill_in 'Item threshold', with: 'thirty'
+
+      click_button("Update Discount")
+
+      @discount_1.reload
+
+      expect(page).to have_content("Item threshold is not a number")
+
+      expect(current_path).to eq("/merchant/discounts/#{@discount_1.id}/edit")
+
+      expect(@discount_1.item_threshold).to eq(20)
+    end
+
+    it 'I receive an error message when either field is left blank or when text is given for value field' do
+      visit "/merchant/discounts/#{@discount_1.id}/edit"
+
+      fill_in 'Item threshold', with: 30
+      fill_in 'Value', with: ''
+
+      click_button("Update Discount")
+
+      @discount_1.reload
+
+      expect(page).to have_content("Value can't be blank and Value is not a number")
+
+      expect(current_path).to eq("/merchant/discounts/#{@discount_1.id}/edit")
+
+      fill_in 'Item threshold', with: ''
+      fill_in 'Value', with: 15
+
+      click_button("Update Discount")
+
+      @discount_1.reload
+
+      expect(page).to have_content("Item threshold can't be blank and Item threshold is not a number")
+
+      fill_in 'Item threshold', with: 30
+      fill_in 'Value', with: 'fifteen'
+
+      click_button("Update Discount")
+
+      @discount_1.reload
+
+      expect(page).to have_content("Value is not a number")
+    end
   end
 end

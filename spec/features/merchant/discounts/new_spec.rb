@@ -33,7 +33,7 @@ RSpec.describe 'as a merchant employee' do
       expect(@merchant_1.discounts.first.value).to eq(15.0)
     end
 
-    it 'I am unable to create a new discount with the item threshold and value fields blank' do
+    it 'I am unable to create a new discount with either the item threshold or value fields blank' do
       visit '/merchant/discounts/new'
 
       fill_in 'Item threshold', with: 20
@@ -41,7 +41,22 @@ RSpec.describe 'as a merchant employee' do
       click_button("Create Discount")
 
       expect(current_path).to eq("/merchant/discounts/new")
-      expect(page).to have_content("Please fill in both fields")
+      expect(page).to have_content("Value can't be blank and Value is not a number")
+
+      fill_in 'Value', with: 20
+
+      click_button("Create Discount")
+
+      expect(current_path).to eq("/merchant/discounts/new")
+      expect(page).to have_content("Item threshold can't be blank and Item threshold is not a number")
+
+      fill_in 'Item threshold', with: ''
+      fill_in 'Value', with: ''
+
+      click_button("Create Discount")
+
+      expect(current_path).to eq("/merchant/discounts/new")
+      expect(page).to have_content("Item threshold can't be blank, Item threshold is not a number, Value can't be blank, and Value is not a number")
     end
   end
 end
