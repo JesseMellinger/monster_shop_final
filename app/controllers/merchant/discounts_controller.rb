@@ -3,13 +3,30 @@ class Merchant::DiscountsController < Merchant::BaseController
     @merchant = current_user.merchant
   end
 
-  def edit
+  def new
     @merchant = current_user.merchant
+    @discount = @merchant.discounts.new()
+  end
+
+  def create
+    merchant = current_user.merchant
+    @item = merchant.discounts.create(discount_params)
+    if @item.save
+      flash[:success] = "Discount created!"
+      redirect_to '/merchant'
+    else
+      flash[:error] = "Please fill in both fields"
+      redirect_to "/merchant/discounts/new"
+    end
+  end
+
+  def edit
+    @discount = Discount.find(params[:id])
   end
 
   def update
-    merchant = current_user.merchant
-    if merchant.update(merchant_discount_params)
+    @discount = Discount.find(params[:id])
+    if @discount.update(discount_params)
       redirect_to "/merchant"
     else
       generate_flash(merchant)
@@ -18,13 +35,13 @@ class Merchant::DiscountsController < Merchant::BaseController
   end
 
   def destroy
-    merchant = current_user.merchant
-    merchant.update(discount: 0)
-    redirect_to "/merchant"
+    discount = Discount.find(params[:id])
+    discount.destroy
+    redirect_to "/merchant/discounts"
   end
 
   private
-  def merchant_discount_params
-    params.require(:merchant).permit(:discount)
+  def discount_params
+    params.require(:discount).permit(:item_threshold, :value)
   end
 end

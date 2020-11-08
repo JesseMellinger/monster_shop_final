@@ -90,3 +90,5 @@ user3_order1.order_items.create!(item_id: pencil.id, quantity: 50, price: pencil
 
 user3_order2.order_items.create!(item_id: pencil.id, quantity: 100, price: pencil.price, fulfilled: false)
 user3_order2.order_items.create!(item_id: dark_helmet.id, quantity: 1, price: dark_helmet.price, fulfilled: false)
+
+#discounts

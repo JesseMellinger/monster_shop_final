@@ -3,10 +3,8 @@
 <p><%= @merchant.city %> <%= @merchant.state %> <%= @merchant.zip %></p>
 
 <%= link_to 'My Items', '/merchant/items' %><br>
-<%= link_to 'Create Discount', "/merchant/discounts/edit" if @merchant.discount.nil?%>
-<%= link_to 'Update Discount', "/merchant/discounts/edit" if !@merchant.discount.nil?%>
-<%= link_to 'Delete Discount', "/merchant/discounts/", method: :delete if !@merchant.discount.nil?%>
-<%= link_to 'View Discount', "/merchant/discounts" %>
+<%= link_to 'Create Discount', "/merchant/discounts/new" %>
+<%= link_to 'View Discount(s)', "/merchant/discounts" %>
 
 <section class="orders">
   <% @merchant.pending_orders.each do |order| %>

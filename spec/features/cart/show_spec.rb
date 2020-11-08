@@ -168,7 +168,7 @@ RSpec.describe 'Cart Show Page' do
         expect(page).to have_content("Cart: 0")
       end
 
-      it "a 20% discount is applied when I add 20 of the same items to my cart" do
+      it "a discount is applied when I add 20 of the same items to my cart" do
         @ogre.update(inventory: 25)
         @ogre.reload
 
