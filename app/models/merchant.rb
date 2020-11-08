@@ -3,6 +3,7 @@ class Merchant < ApplicationRecord
   has_many :order_items, through: :items
   has_many :orders, through: :order_items
   has_many :users
+  has_many :discounts
 
   validates_presence_of :name,
                         :address,
@@ -31,5 +32,12 @@ class Merchant < ApplicationRecord
 
   def order_items_by_order(order_id)
     order_items.where(order_id: order_id)
+  end
+
+  def find_max_discount(quantity)
+    self.discounts
+            .where("item_threshold <= ?", quantity)
+            .order("value DESC")
+            .limit(1)
   end
 end

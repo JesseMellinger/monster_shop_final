@@ -90,3 +90,10 @@ user3_order1.order_items.create!(item_id: pencil.id, quantity: 50, price: pencil
 
 user3_order2.order_items.create!(item_id: pencil.id, quantity: 100, price: pencil.price, fulfilled: false)
 user3_order2.order_items.create!(item_id: dark_helmet.id, quantity: 1, price: dark_helmet.price, fulfilled: false)
+
+#discounts
+discount_1 = bike_shop.discounts.create!(item_threshold: 20, value: 15.0)
+discount_2 = bike_shop.discounts.create!(item_threshold: 10, value: 10.0)
+discount_3 = bike_shop.discounts.create!(item_threshold: 5, value: 5.0)
+
+discount_4 = dog_shop.discounts.create!(item_threshold: 10, value: 10.0)
