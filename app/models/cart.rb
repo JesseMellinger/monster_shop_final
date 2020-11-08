@@ -34,15 +34,6 @@ class Cart
       else
         grand_total += item.price * quantity
       end
-    # case
-    # when quantity >= 20 then grand_total += (item.price * quantity) - ((item.price * quantity) * (merchant.discount.twenty_item_threshold)
-    # when quantity.between?(10,19) then grand_total += (item.price * quantity) - ((item.price * quantity) * (merchant.discount.ten_item_threshold)
-    # when quantity.between?(5,9) then grand_total += (item.price * quantity) - ((item.price * quantity) * (merchant.discount.five_item_threshold)
-    #   if quantity >= 20
-    #     grand_total += (item.price * quantity ) - ((item.price * quantity) * (merchant.discount.to_f / 100))
-    #   else
-    #     grand_total += item.price * quantity
-    #   end
     end
     grand_total
   end
