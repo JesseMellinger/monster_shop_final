@@ -5,6 +5,6 @@
     <p>Item Threshold: <%= discount.item_threshold %></p>
     <p>Discount Value: <%= discount.value %></p>
     <%= link_to 'Update Discount', "/merchant/discounts/#{discount.id}/edit" %>
-    <%= link_to 'Delete Discount', "/merchant/discounts/#{discount.id}", method: :delete %>
+    <%= link_to 'Delete Discount', "/discounts/#{discount.id}", method: :delete %>
   </section>
 <% end %>

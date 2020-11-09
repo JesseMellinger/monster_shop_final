@@ -22,13 +22,13 @@ RSpec.describe 'as a merchant employee' do
     end
 
     it 'I can delete a discount' do
-      visit '/merchant/discounts'
+      visit discounts_path
 
       within("#discount-#{@discount_1.id}") do
         click_link("Delete Discount")
       end
 
-      expect(current_path).to eq("/merchant/discounts")
+      expect(current_path).to eq(discounts_path)
 
       @merchant_1.reload
 
