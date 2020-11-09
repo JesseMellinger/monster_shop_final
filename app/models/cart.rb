@@ -28,9 +28,9 @@ class Cart
     grand_total = 0.0
     @contents.each do |item_id, quantity|
       item = Item.find(item_id)
-      discount = item.merchant.find_max_discount(quantity)
-      if !discount.empty?
-        grand_total += (item.price * quantity ) - ((item.price * quantity) * (discount.first.value / 100))
+      discount = item.merchant.find_max_discount(quantity).first
+      if discount
+        grand_total += (item.price * quantity ) - ((item.price * quantity) * (discount.value / 100))
       else
         grand_total += item.price * quantity
       end
