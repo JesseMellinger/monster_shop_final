@@ -35,6 +35,46 @@ RSpec.describe 'Create Order' do
         expect(page).to have_link(order.id)
       end
     end
+
+    it 'orders are created with bulk discounts applied to items and different merchant discounts applied' do
+      discount_1 = @megan.discounts.create!(item_threshold: 20, value: 15.0)
+      discount_2 = @megan.discounts.create!(item_threshold: 10, value: 10.0)
+      discount_3 = @brian.discounts.create!(item_threshold: 10, value: 12.0)
+
+      @ogre.update(inventory: 25)
+      @ogre.reload
+
+      @giant.update(inventory: 15)
+      @giant.reload
+
+      @hippo.update(inventory: 30)
+      @hippo.reload
+
+      20.times do
+        visit item_path(@ogre)
+        click_button 'Add to Cart'
+      end
+
+      10.times do
+        visit item_path(@giant)
+        click_button 'Add to Cart'
+      end
+
+      10.times do
+        visit item_path(@hippo)
+        click_button 'Add to Cart'
+      end
+
+      visit '/cart'
+
+      click_button 'Check Out'
+
+      order = Order.last
+
+      expect(order.order_items.first.price).to eq(17)
+      expect(order.order_items.second.price).to eq(45)
+      expect(order.order_items.third.price).to eq(44)
+    end
   end
 
   describe 'As a Visitor' do
