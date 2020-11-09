@@ -111,6 +111,18 @@ RSpec.describe 'Order Show Page' do
 
       expect(page).to have_content("Total: #{ActionController::Base.helpers.number_to_currency(order_4.grand_total)}")
       expect(page).to have_content("Total: $1,452.00")
+
+      within("#order-item-#{order_item_4.id}") do
+        expect(page).to have_content("Price (with discount): $17.00")
+      end
+
+      within("#order-item-#{order_item_5.id}") do
+        expect(page).to have_content("Price (with discount): $45.00")
+      end
+
+      within("#order-item-#{order_item_6.id}") do
+        expect(page).to have_content("Price (with discount): $44.00")
+      end
     end
   end
 end
