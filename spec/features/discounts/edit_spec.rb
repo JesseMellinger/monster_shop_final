@@ -22,7 +22,7 @@ RSpec.describe 'as a merchant employee' do
     end
 
     it 'I can edit discount for my merchant' do
-      visit "/merchant/discounts/#{@discount_1.id}/edit"
+      visit edit_discount_path(@discount_1.id)
 
       fill_in 'Item threshold', with: 30
 
@@ -36,7 +36,7 @@ RSpec.describe 'as a merchant employee' do
     end
 
     it 'I receive an error message if I input a data type other than an integer into item threshold' do
-      visit "/merchant/discounts/#{@discount_1.id}/edit"
+      visit edit_discount_path(@discount_1.id)
 
       fill_in 'Item threshold', with: 30.4
 
@@ -54,13 +54,13 @@ RSpec.describe 'as a merchant employee' do
 
       expect(page).to have_content("Item threshold is not a number")
 
-      expect(current_path).to eq("/merchant/discounts/#{@discount_1.id}/edit")
+      expect(current_path).to eq(edit_discount_path(@discount_1.id))
 
       expect(@discount_1.item_threshold).to eq(20)
     end
 
     it 'I receive an error message when either field is left blank or when text is given for value field' do
-      visit "/merchant/discounts/#{@discount_1.id}/edit"
+      visit edit_discount_path(@discount_1.id)
 
       fill_in 'Item threshold', with: 30
       fill_in 'Value', with: ''
@@ -71,7 +71,7 @@ RSpec.describe 'as a merchant employee' do
 
       expect(page).to have_content("Value can't be blank and Value is not a number")
 
-      expect(current_path).to eq("/merchant/discounts/#{@discount_1.id}/edit")
+      expect(current_path).to eq(edit_discount_path(@discount_1.id))
 
       fill_in 'Item threshold', with: ''
       fill_in 'Value', with: 15

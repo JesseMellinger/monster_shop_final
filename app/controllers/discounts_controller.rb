@@ -1,4 +1,4 @@
-class Merchant::DiscountsController < Merchant::BaseController
+class DiscountsController < Merchant::BaseController
   def index
     @merchant = current_user.merchant
   end
@@ -16,8 +16,12 @@ class Merchant::DiscountsController < Merchant::BaseController
       redirect_to '/merchant'
     else
       flash[:error] = discount.errors.full_messages.to_sentence
-      redirect_to "/merchant/discounts/new"
+      redirect_to new_discount_path
     end
+  end
+
+  def show
+    @discount = Discount.find(params[:id])
   end
 
   def edit
@@ -30,14 +34,14 @@ class Merchant::DiscountsController < Merchant::BaseController
       redirect_to "/merchant"
     else
       flash[:error] = @discount.errors.full_messages.to_sentence
-      redirect_to "/merchant/discounts/#{@discount.id}/edit"
+      redirect_to edit_discount_path(@discount.id)
     end
   end
 
   def destroy
     discount = Discount.find(params[:id])
     discount.destroy
-    redirect_to "/merchant/discounts"
+    redirect_to discounts_path
   end
 
   private

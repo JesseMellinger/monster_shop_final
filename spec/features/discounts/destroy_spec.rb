@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'as a merchant employee' do
-  describe 'when I visit a new discount page' do
+  describe 'when I visit the my discount index page' do
     before :each do
       @merchant_1 = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218)
       @merchant_2 = Merchant.create!(name: 'Brians Bagels', address: '125 Main St', city: 'Denver', state: 'CO', zip: 80218)
@@ -16,67 +16,23 @@ RSpec.describe 'as a merchant employee' do
       @order_item_2 = @order_2.order_items.create!(item: @hippo, price: @hippo.price, quantity: 2, fulfilled: true)
       @order_item_3 = @order_2.order_items.create!(item: @ogre, price: @ogre.price, quantity: 2, fulfilled: false)
       @order_item_4 = @order_3.order_items.create!(item: @giant, price: @giant.price, quantity: 2, fulfilled: false)
+      @discount_1 = @merchant_1.discounts.create!(item_threshold: 20, value: 15.0)
+      @discount_2 = @merchant_1.discounts.create!(item_threshold: 10, value: 10.0)
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@m_user)
     end
 
-    it 'I can create a new discount for my merchant when item threshold and value given' do
-      visit '/merchant/discounts/new'
+    it 'I can delete a discount' do
+      visit discounts_path
 
-      fill_in 'Item threshold', with: 20
-      fill_in 'Value', with: 15.0
+      within("#discount-#{@discount_1.id}") do
+        click_link("Delete Discount")
+      end
 
-      click_button("Create Discount")
+      expect(current_path).to eq(discounts_path)
 
       @merchant_1.reload
 
-      expect(@merchant_1.discounts.first.item_threshold).to eq(20)
-      expect(@merchant_1.discounts.first.value).to eq(15.0)
-    end
-
-    it 'I am unable to create a new discount with either the item threshold or value fields blank' do
-      visit '/merchant/discounts/new'
-
-      fill_in 'Item threshold', with: 20
-
-      click_button("Create Discount")
-
-      expect(current_path).to eq("/merchant/discounts/new")
-      expect(page).to have_content("Value can't be blank and Value is not a number")
-
-      fill_in 'Value', with: 20
-
-      click_button("Create Discount")
-
-      expect(current_path).to eq("/merchant/discounts/new")
-      expect(page).to have_content("Item threshold can't be blank and Item threshold is not a number")
-
-      fill_in 'Item threshold', with: ''
-      fill_in 'Value', with: ''
-
-      click_button("Create Discount")
-
-      expect(current_path).to eq("/merchant/discounts/new")
-      expect(page).to have_content("Item threshold can't be blank, Item threshold is not a number, Value can't be blank, and Value is not a number")
-    end
-
-    it 'I receive an error message when the item threshold field is not filled with an integer and when a string is put into the value field' do
-      visit '/merchant/discounts/new'
-
-      fill_in 'Item threshold', with: 20.4
-      fill_in 'Value', with: 10
-
-      click_button("Create Discount")
-
-      expect(current_path).to eq("/merchant/discounts/new")
-      expect(page).to have_content("Item threshold must be an integer")
-
-      fill_in 'Item threshold', with: 20
-      fill_in 'Value', with: 'ten'
-
-      click_button("Create Discount")
-
-      expect(current_path).to eq("/merchant/discounts/new")
-      expect(page).to have_content("Value is not a number")
+      expect(@merchant_1.discounts.length).to eq(1)
     end
   end
 end
