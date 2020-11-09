@@ -68,7 +68,7 @@ RSpec.describe 'Merchant Dashboard' do
 
       click_link("Create Discount")
 
-      expect(current_path).to eq("/merchant/discounts/new")
+      expect(current_path).to eq(new_discount_path)
     end
 
     it 'I see link to view the curent bulk discount for my merchant' do
@@ -76,7 +76,7 @@ RSpec.describe 'Merchant Dashboard' do
 
       click_link("View Discount(s)")
 
-      expect(current_path).to eq("/merchant/discounts")
+      expect(current_path).to eq(discounts_path)
     end
   end
 end
