@@ -4,9 +4,10 @@ Rails.application.routes.draw do
 
   resources :merchants do
     resources :items, only: [:index]
-    resources :discounts
   end
 
+  resources :discounts
+  
   resources :items, only: [:index, :show] do
     resources :reviews, only: [:new, :create]
   end

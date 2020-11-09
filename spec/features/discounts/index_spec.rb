@@ -22,7 +22,7 @@ RSpec.describe 'as a merchant employee' do
     end
 
     it 'I see the discount(s) for my merchant displayed' do
-      visit merchant_discounts_path(@merchant_1.id)
+      visit discounts_path
 
       within("#discount-#{@discount_1.id}") do
         expect(page).to have_content("Item Threshold: #{@discount_1.item_threshold}")
