@@ -3,6 +3,15 @@
   <p>Your Cart is Empty!</p>
 <% else %>
 <h3>Total: <%= number_to_currency(cart.grand_total) %></h3>
+<h3>Bulk Discounts Applied:</h3>
+  <% cart.items.each do |item| %>
+    <% if !item.discounts_available(cart.count_of(item.id)).empty? %>
+      <% discount = item.find_max_discount(cart.count_of(item.id)) %>
+      <section id='discount-<%= discount.id %>'>
+        <p><%= discount.value %>% discount on <%= item.name %></p>
+      </section>
+    <% end %>
+  <% end %>
   <% cart.items.each do |item| %>
     <section id='item-<%= item.id%>'>
       <h2><%= link_to item.name, "/items/#{item.id}" %></h2>

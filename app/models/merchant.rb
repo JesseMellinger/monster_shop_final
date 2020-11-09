@@ -36,8 +36,8 @@ class Merchant < ApplicationRecord
 
   def find_max_discount(quantity)
     self.discounts
-            .where("item_threshold <= ?", quantity)
-            .order("value DESC")
-            .limit(1)
+        .where("item_threshold <= ?", quantity)
+        .order("value DESC")
+        .limit(1)
   end
 end

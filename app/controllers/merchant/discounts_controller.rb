@@ -10,12 +10,12 @@ class Merchant::DiscountsController < Merchant::BaseController
 
   def create
     merchant = current_user.merchant
-    @item = merchant.discounts.create(discount_params)
-    if @item.save
+    discount = merchant.discounts.create(discount_params)
+    if discount.save
       flash[:success] = "Discount created!"
       redirect_to '/merchant'
     else
-      flash[:error] = "Please fill in both fields"
+      flash[:error] = discount.errors.full_messages.to_sentence
       redirect_to "/merchant/discounts/new"
     end
   end
@@ -29,8 +29,8 @@ class Merchant::DiscountsController < Merchant::BaseController
     if @discount.update(discount_params)
       redirect_to "/merchant"
     else
-      generate_flash(merchant)
-      render :edit
+      flash[:error] = @discount.errors.full_messages.to_sentence
+      redirect_to "/merchant/discounts/#{@discount.id}/edit"
     end
   end
 

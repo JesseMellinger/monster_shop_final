@@ -186,6 +186,38 @@ RSpec.describe 'Cart Show Page' do
         expect(page).to have_content("Total: #{ActionController::Base.helpers.number_to_currency((@ogre.price * 20) - ((@ogre.price * 20) * (@discount_1.value / 100)))}")
         expect(page).to have_content("Total: $340.00")
       end
+
+      it 'I can see all bulk discounts applied' do
+        @ogre.update(inventory: 25)
+        @ogre.reload
+
+        @giant.update(inventory: 15)
+        @giant.reload
+
+        20.times do
+          visit item_path(@ogre)
+          click_button 'Add to Cart'
+        end
+
+        10.times do
+          visit item_path(@giant)
+          click_button 'Add to Cart'
+        end
+
+        expect(page).to have_content("Cart: 30")
+
+        visit('/cart')
+
+        within("#discount-#{@discount_1.id}") do
+          expect(page).to have_content("#{@discount_1.value}% discount on #{@ogre.name}")
+        end
+
+        within("#discount-#{@discount_2.id}") do
+          expect(page).to have_content("#{@discount_2.value}% discount on #{@giant.name}")
+        end
+
+        expect(page).to have_content("Total: $790.00")
+      end
     end
   end
 end

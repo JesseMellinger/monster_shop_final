@@ -29,4 +29,12 @@ class Item < ApplicationRecord
   def average_rating
     reviews.average(:rating)
   end
+
+  def discounts_available(quantity)
+    merchant.discounts.where("item_threshold <= ?", quantity)
+  end
+
+  def find_max_discount(quantity)
+    merchant.find_max_discount(quantity).first
+  end
 end
