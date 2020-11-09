@@ -59,6 +59,12 @@ RSpec.describe Cart do
     it '.subtotal_of()' do
       expect(@cart.subtotal_of(@ogre.id)).to eq(20)
       expect(@cart.subtotal_of(@giant.id)).to eq(100)
+
+      @ogre.update(inventory: 25)
+      @ogre.reload
+
+      @cart.contents[@ogre.id.to_s] = 20
+      expect(@cart.subtotal_of(@ogre.id)).to eq(340)
     end
 
     it '.limit_reached?()' do
