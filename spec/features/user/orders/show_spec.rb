@@ -82,5 +82,35 @@ RSpec.describe 'Order Show Page' do
       expect(@giant.inventory).to eq(5)
       expect(@ogre.inventory).to eq(7)
     end
+
+    it 'I see the discounted total and discounted price for each item if a discount is applied' do
+      discount_1 = @megan.discounts.create!(item_threshold: 20, value: 15.0)
+      discount_2 = @megan.discounts.create!(item_threshold: 10, value: 10.0)
+      discount_3 = @brian.discounts.create!(item_threshold: 10, value: 12.0)
+
+      @ogre.update(price: 20, inventory: 25)
+      @ogre.reload
+
+      @giant.update(inventory: 15)
+      @giant.reload
+
+      @hippo.update(inventory: 30)
+      @hippo.reload
+
+      order_4 = @user.orders.create!(status: "pending")
+
+      discounted_ogre_price = @ogre.price - (@ogre.price * (discount_1.value / 100))
+      discounted_giant_price = @giant.price - (@giant.price * (discount_2.value / 100))
+      discounted_hippo_price = @hippo.price - (@hippo.price * (discount_3.value / 100))
+
+      order_item_4 = order_4.order_items.create!(item: @ogre, price: discounted_ogre_price, quantity: 20, fulfilled: true)
+      order_item_5 = order_4.order_items.create!(item: @giant, price: discounted_giant_price, quantity: 12, fulfilled: true)
+      order_item_6 = order_4.order_items.create!(item: @hippo, price: discounted_hippo_price, quantity: 13, fulfilled: true)
+
+      visit "/profile/orders/#{order_4.id}"
+
+      expect(page).to have_content("Total: #{ActionController::Base.helpers.number_to_currency(order_4.grand_total)}")
+      expect(page).to have_content("Total: $1,452.00")
+    end
   end
 end
