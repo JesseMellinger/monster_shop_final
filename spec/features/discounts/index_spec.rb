@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'as a merchant employee' do
-  describe 'when I visit the my discount index page' do
+  describe 'when I visit my discount index page' do
     before :each do
       @merchant_1 = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218)
       @merchant_2 = Merchant.create!(name: 'Brians Bagels', address: '125 Main St', city: 'Denver', state: 'CO', zip: 80218)
@@ -27,15 +27,15 @@ RSpec.describe 'as a merchant employee' do
       within("#discount-#{@discount_1.id}") do
         expect(page).to have_content("Item Threshold: #{@discount_1.item_threshold}")
         expect(page).to have_content("Discount Value: #{@discount_1.value}")
-        expect(page).to have_link("Update Discount", :href=>"/merchant/discounts/#{@discount_1.id}/edit")
-        expect(page).to have_link("Delete Discount", :href=>"/merchant/discounts/#{@discount_1.id}")
+        expect(page).to have_link("Update Discount", :href=>edit_discount_path(@discount_1.id))
+        expect(page).to have_link("Delete Discount", :href=>"/discounts/#{@discount_1.id}")
       end
 
       within("#discount-#{@discount_2.id}") do
         expect(page).to have_content("Item Threshold: #{@discount_2.item_threshold}")
         expect(page).to have_content("Discount Value: #{@discount_2.value}")
-        expect(page).to have_link("Update Discount", :href=>"/merchant/discounts/#{@discount_2.id}/edit")
-        expect(page).to have_link("Delete Discount", :href=>"/merchant/discounts/#{@discount_2.id}")
+        expect(page).to have_link("Update Discount", :href=>edit_discount_path(@discount_2.id))
+        expect(page).to have_link("Delete Discount", :href=>"/discounts/#{@discount_2.id}")
       end
     end
   end
