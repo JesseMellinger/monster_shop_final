@@ -1,4 +1,4 @@
-<%= form_with model: @discount, url: "/merchants/#{@merchant.id}/discounts", method: :post do |f| %>
+<%= form_with model: @discount, url: "/discounts", method: :post do |f| %>
 
   <%= f.label :item_threshold %>
   <%= f.number_field :item_threshold %>
