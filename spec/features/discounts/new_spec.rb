@@ -78,5 +78,43 @@ RSpec.describe 'as a merchant employee' do
       expect(current_path).to eq(new_discount_path)
       expect(page).to have_content("Value is not a number")
     end
+
+    it 'I receive a message that a discount already exists for an item threshold when trying to create a new discount with the same threshold' do
+      discount_1 = @merchant_1.discounts.create!(item_threshold: 20, value: 15.0)
+
+      visit new_discount_path
+
+      fill_in 'Item threshold', with: 20
+      fill_in 'Value', with: 10
+
+      click_button("Create Discount")
+
+      expect(current_path).to eq(new_discount_path)
+      expect(page).to have_content("Item threshold has already been taken")
+    end
+
+    it 'I can create a new discount with the same item threshold as another discount record if for a different merchant' do
+      discount_1 = @merchant_1.discounts.create!(item_threshold: 20, value: 15.0)
+
+      m_user_2 = @merchant_2.users.create!(name: 'Brian', address: '125 Main St', city: 'Seattle', state: 'WA', zip: 98723, email: 'brian@example.com', password: 'securepassword')
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(m_user_2)
+
+      expect(@merchant_2.discounts.length).to eq(0)
+
+      visit new_discount_path
+
+      fill_in 'Item threshold', with: 20
+      fill_in 'Value', with: 10
+
+      click_button("Create Discount")
+
+      expect(current_path).to eq('/merchant')
+      expect(page).to have_content("Discount created!")
+
+      @merchant_2.reload
+
+      expect(@merchant_2.discounts.length).to eq(1)
+    end
   end
 end
