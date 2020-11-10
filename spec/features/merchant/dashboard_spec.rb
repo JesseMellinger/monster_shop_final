@@ -93,5 +93,11 @@ RSpec.describe 'Merchant Dashboard' do
 
       expect(current_path).to eq(edit_merchant_item_path(@ogre.id))
     end
+
+    it 'I see a statistic about unfulfilled items and the revenue impact' do
+      visit '/merchant'
+
+      expect(page).to have_content("You have 2 unfulfilled orders worth $140.50")
+    end
   end
 end
