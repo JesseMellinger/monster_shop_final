@@ -40,4 +40,9 @@ class Merchant < ApplicationRecord
         .order("value DESC")
         .limit(1)
   end
+
+  def items_with_placeholder_images
+    placeholder_image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw"
+    items.where("image = ?", placeholder_image)
+  end
 end
