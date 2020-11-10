@@ -45,4 +45,13 @@ class Merchant < ApplicationRecord
     placeholder_image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw"
     items.where("image = ?", placeholder_image)
   end
+
+  def count_of_unfulfilled
+    order_items.where("fulfilled = false").count
+  end
+
+  def revenue_for_unfulfilled
+    order_items.where("fulfilled = false")
+               .sum("order_items.price * order_items.quantity")
+  end
 end

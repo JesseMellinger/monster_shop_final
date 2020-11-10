@@ -72,5 +72,23 @@ RSpec.describe Merchant do
 
       expect(@megan.items_with_placeholder_images).to eq([@ogre])
     end
+
+    it '#count_of_unfulfilled' do
+      expect(@megan.count_of_unfulfilled).to eq(3)
+
+      order_4 = @user_1.orders.create!
+      order_item_5 = order_4.order_items.create!(item: @ogre, price: @ogre.price, quantity: 2)
+
+      expect(@megan.count_of_unfulfilled).to eq(4)
+    end
+
+    it '#revenue_for_unfulfilled' do
+      expect(@megan.revenue_for_unfulfilled).to eq(240.5)
+
+      order_4 = @user_1.orders.create!
+      order_item_5 = order_4.order_items.create!(item: @ogre, price: @ogre.price, quantity: 2)
+
+      expect(@megan.revenue_for_unfulfilled).to eq(281)
+    end
   end
 end
