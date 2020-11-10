@@ -13,7 +13,7 @@ class User::OrdersController < ApplicationController
     order = current_user.orders.new
     order.save
       cart.items.each do |item|
-        discount = item.merchant.find_max_discount(cart.count_of(item.id)).first
+        discount = item.find_max_discount(cart.count_of(item.id))
         price = discount ? (item.price - (item.price * (discount.value / 100))) : item.price
         order.order_items.create({
           item: item,
