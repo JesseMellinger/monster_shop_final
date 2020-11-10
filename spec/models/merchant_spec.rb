@@ -33,29 +33,44 @@ RSpec.describe Merchant do
       @order_item_2 = @order_1.order_items.create!(item: @hippo, price: @hippo.price, quantity: 3)
       @order_item_3 = @order_2.order_items.create!(item: @giant, price: @hippo.price, quantity: 2)
       @order_item_4 = @order_2.order_items.create!(item: @ogre, price: @hippo.price, quantity: 2)
+      @discount_1 = @megan.discounts.create!(item_threshold: 20, value: 15.0)
+      @discount_2 = @megan.discounts.create!(item_threshold: 10, value: 10.0)
     end
 
-    it '.item_count' do
+    it '#item_count' do
       expect(@megan.item_count).to eq(2)
       expect(@brian.item_count).to eq(1)
       expect(@sal.item_count).to eq(0)
     end
 
-    it '.average_item_price' do
+    it '#average_item_price' do
       expect(@megan.average_item_price.round(2)).to eq(35.13)
       expect(@brian.average_item_price.round(2)).to eq(50.00)
     end
 
-    it '.distinct_cities' do
+    it '#distinct_cities' do
       expect(@megan.distinct_cities).to eq(['Denver, CO', 'Denver, IA'])
     end
 
-    it '.pending_orders' do
+    it '#pending_orders' do
       expect(@megan.pending_orders).to eq([@order_1])
     end
 
-    it '.order_items_by_order' do
+    it '#order_items_by_order' do
       expect(@megan.order_items_by_order(@order_1.id)).to eq([@order_item_1])
+    end
+
+    it '#find_max_discount' do
+      expect(@megan.find_max_discount(20).first).to eq(@discount_1)
+      expect(@megan.find_max_discount(15).first).to eq(@discount_2)
+      expect(@megan.find_max_discount(9)).to eq([])
+    end
+
+    it '#items_with_placeholder_images'do
+      @giant.update!(image: "https://image.shutterstock.com/z/stock-photo-hand-drawing-cartoon-character-big-man-showing-double-thumb-up-1138960457.jpg")
+      @giant.reload
+
+      expect(@megan.items_with_placeholder_images).to eq([@ogre])
     end
   end
 end
