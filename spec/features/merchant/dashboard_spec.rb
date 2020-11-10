@@ -99,5 +99,15 @@ RSpec.describe 'Merchant Dashboard' do
 
       expect(page).to have_content("You have 2 unfulfilled orders worth $140.50")
     end
+
+    it 'I see a warning if an item quantity for an order exceeds current inventory count' do
+      @order_item_3.update(quantity: 6)
+      @order_item_3.reload
+      @order_2.reload
+
+      visit '/merchant'
+
+      expect(page).to have_content("Warning: Item quantity on order #{@order_2.id} exceeds current inventory count")
+    end
   end
 end

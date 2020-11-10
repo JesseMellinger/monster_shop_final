@@ -13,6 +13,9 @@
       <p>Potential Revenue: <%= order.merchant_subtotal(@merchant.id) %></p>
       <p>Quantity of Items: <%= order.merchant_quantity(@merchant.id) %></p>
       <p>Created: <%= order.created_at %></p>
+      <% if @merchant.item_quantity_exceeds_inventory?(order) %>
+        <p>Warning: Item quantity on order <%= order.id %> exceeds current inventory count</p>
+      <% end %>
     </section>
   <% end %>
 </section>
