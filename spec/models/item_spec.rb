@@ -40,13 +40,6 @@ RSpec.describe Item do
       expect(@ogre.average_rating.round(2)).to eq(3.00)
     end
 
-    it '#discounts_available' do
-      @ogre.update(inventory: 25)
-      @ogre.reload
-
-      expect(@ogre.discounts_available(20).length).to eq(2)
-    end
-
     it '#find_max_discount' do
       @ogre.update(inventory: 25)
       @ogre.reload
