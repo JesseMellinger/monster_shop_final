@@ -30,13 +30,13 @@ RSpec.describe Item do
       @discount_2 = @megan.discounts.create!(item_threshold: 10, value: 10.0)
     end
 
-    it '.sorted_reviews()' do
+    it '#sorted_reviews()' do
       expect(@ogre.sorted_reviews(3, :desc)).to eq([@review_1, @review_5, @review_2])
       expect(@ogre.sorted_reviews(3, :asc)).to eq([@review_3, @review_4, @review_2])
       expect(@ogre.sorted_reviews).to eq([@review_3, @review_4, @review_2, @review_5, @review_1])
     end
 
-    it '.average_rating' do
+    it '#average_rating' do
       expect(@ogre.average_rating.round(2)).to eq(3.00)
     end
 
@@ -45,6 +45,18 @@ RSpec.describe Item do
       @ogre.reload
 
       expect(@ogre.find_max_discount(20)).to eq(@discount_1)
+    end
+
+    it '#summed_quantity_exceeds_inventory?' do
+      m_user = @megan.users.create(name: 'Megan', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218, email: 'megan@example.com', password: 'securepassword')
+      order_1 = m_user.orders.create!(status: "pending")
+      order_2 = m_user.orders.create!(status: "pending")
+      order_item_1 = order_1.order_items.create!(item: @ogre, price: @ogre.price, quantity: 2, fulfilled: false)
+      order_item_2 = order_1.order_items.create!(item: @giant, price: @giant.price, quantity: 2, fulfilled: false)
+      order_item_3 = order_2.order_items.create!(item: @ogre, price: @ogre.price, quantity: 4, fulfilled: false)
+
+      expect(@ogre.summed_quantity_exceeds_inventory?).to eq(true)
+      expect(@giant.summed_quantity_exceeds_inventory?).to eq(false)
     end
   end
 
