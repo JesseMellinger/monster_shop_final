@@ -43,10 +43,26 @@ class Cart
   end
 
   def subtotal_of(item_id)
-    @contents[item_id.to_s] * Item.find(item_id).price
+    item = Item.find(item_id)
+    discount = item.merchant.find_max_discount(@contents[item_id.to_s]).first
+    if discount
+      (@contents[item_id.to_s] * item.price) - ((@contents[item_id.to_s] * item.price) * (discount.value/100))
+    else
+      @contents[item_id.to_s] * item.price
+    end
   end
 
   def limit_reached?(item_id)
     count_of(item_id) == Item.find(item_id).inventory
+  end
+
+  def items_with_discounts
+    items = {}
+    self.contents.each do |item_id, quantity|
+      item = Item.find(item_id)
+      discount = item.find_max_discount(quantity)
+      items[item] = discount if item.find_max_discount(quantity)
+    end
+    items
   end
 end
