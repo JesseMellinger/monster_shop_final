@@ -24,13 +24,13 @@ RSpec.describe 'Cart Show Page' do
 
         visit '/cart'
 
-        expect(page).to have_content("Total: #{number_to_currency((@ogre.price * 1) + (@hippo.price * 2))}")
+        expect(page).to have_content("Total (with discounts applied): #{number_to_currency((@ogre.price * 1) + (@hippo.price * 2))}")
 
         within "#item-#{@ogre.id}" do
           expect(page).to have_link(@ogre.name)
-          expect(page).to have_content("Price: #{number_to_currency(@ogre.price)}")
+          expect(page).to have_content("Price (before discount applied): #{number_to_currency(@ogre.price)}")
           expect(page).to have_content("Quantity: 1")
-          expect(page).to have_content("Subtotal: #{number_to_currency(@ogre.price * 1)}")
+          expect(page).to have_content("Subtotal (with discount applied): #{number_to_currency(@ogre.price * 1)}")
           expect(page).to have_content("Sold by: #{@megan.name}")
           expect(page).to have_css("img[src*='#{@ogre.image}']")
           expect(page).to have_link(@megan.name)
@@ -38,9 +38,9 @@ RSpec.describe 'Cart Show Page' do
 
         within "#item-#{@hippo.id}" do
           expect(page).to have_link(@hippo.name)
-          expect(page).to have_content("Price: #{number_to_currency(@hippo.price)}")
+          expect(page).to have_content("Price (before discount applied): #{number_to_currency(@hippo.price)}")
           expect(page).to have_content("Quantity: 2")
-          expect(page).to have_content("Subtotal: #{number_to_currency(@hippo.price * 2)}")
+          expect(page).to have_content("Subtotal (with discount applied): #{number_to_currency(@hippo.price * 2)}")
           expect(page).to have_content("Sold by: #{@brian.name}")
           expect(page).to have_css("img[src*='#{@hippo.image}']")
           expect(page).to have_link(@brian.name)
@@ -183,8 +183,8 @@ RSpec.describe 'Cart Show Page' do
 
         visit('/cart')
 
-        expect(page).to have_content("Total: #{ActionController::Base.helpers.number_to_currency((@ogre.price * 20) - ((@ogre.price * 20) * (@discount_1.value / 100)))}")
-        expect(page).to have_content("Total: $340.00")
+        expect(page).to have_content("Total (with discounts applied): #{ActionController::Base.helpers.number_to_currency((@ogre.price * 20) - ((@ogre.price * 20) * (@discount_1.value / 100)))}")
+        expect(page).to have_content("Total (with discounts applied): $340.00")
       end
 
       it 'I can see all bulk discounts applied' do
@@ -208,15 +208,15 @@ RSpec.describe 'Cart Show Page' do
 
         visit('/cart')
 
-        within("#discount-#{@discount_1.id}") do
+        within("#item-discount-#{@ogre.id}") do
           expect(page).to have_content("#{@discount_1.value}% discount on #{@ogre.name}")
         end
 
-        within("#discount-#{@discount_2.id}") do
+        within("#item-discount-#{@giant.id}") do
           expect(page).to have_content("#{@discount_2.value}% discount on #{@giant.name}")
         end
 
-        expect(page).to have_content("Total: $790.00")
+        expect(page).to have_content("Total (with discounts applied): $790.00")
       end
     end
   end
