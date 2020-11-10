@@ -54,4 +54,11 @@ class Merchant < ApplicationRecord
     order_items.where("fulfilled = false")
                .sum("order_items.price * order_items.quantity")
   end
+
+  def item_quantity_exceeds_inventory?(order)
+    order_items = self.order_items.where("order_id = ?", order.id)
+    order_items.any? do |order_item|
+      !order_item.fulfillable?
+    end
+  end
 end
