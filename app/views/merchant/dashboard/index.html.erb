@@ -6,6 +6,8 @@
 <%= link_to 'Create Discount', new_discount_path %>
 <%= link_to 'View Discount(s)', discounts_path %>
 
+<h3>You have <%= @merchant.count_of_unfulfilled %> unfulfilled orders worth <%= number_to_currency(@merchant.revenue_for_unfulfilled) %></h3>
+
 <section class="orders">
   <% @merchant.pending_orders.each do |order| %>
     <section id="order-<%= order.id %>">
@@ -20,7 +22,15 @@
   <% end %>
 </section>
 
-<h3>You have <%= @merchant.count_of_unfulfilled %> unfulfilled orders worth <%= number_to_currency(@merchant.revenue_for_unfulfilled) %></h3>
+<section class="items">
+    <% @merchant.items.each do |item| %>
+      <section id="item-<%= item.id %>">
+        <% if item.summed_quantity_exceeds_inventory? %>
+          <p>Warning: Orders summed quantity of item <%= item.id %> exceed inventory</p>
+        <% end %>
+      </section>
+    <% end %>
+<section>
 
 <h3>To-Do List:</h3>
 <section class="items-placeholder-images">
