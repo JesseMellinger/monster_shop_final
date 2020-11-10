@@ -90,5 +90,17 @@ RSpec.describe Merchant do
 
       expect(@megan.revenue_for_unfulfilled).to eq(281)
     end
+
+    it '#item_quantity_exceeds_inventory?' do
+      @order_item_1.update(quantity: 6)
+      @order_item_1.reload
+
+      expect(@megan.item_quantity_exceeds_inventory?(@order_1)).to eq(true)
+
+      @order_item_1.update(quantity: 5)
+      @order_item_1.reload
+
+      expect(@megan.item_quantity_exceeds_inventory?(@order_1)).to eq(false)
+    end
   end
 end
