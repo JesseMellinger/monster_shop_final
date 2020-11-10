@@ -109,5 +109,15 @@ RSpec.describe 'Merchant Dashboard' do
 
       expect(page).to have_content("Warning: Item quantity on order #{@order_2.id} exceeds current inventory count")
     end
+
+    it 'if several orders exist for an item, and their summed quantity exceeds the Merchants inventory for that item, a warning message is shown' do
+      order_item_5 = @order_1.order_items.create!(item: @ogre, price: @ogre.price, quantity: 4, fulfilled: false)
+      @order_1.reload
+
+      visit '/merchant'
+
+      expect(page).to have_content("Warning: Orders summed quantity of item #{@ogre.id} exceed inventory")
+      expect(page).to_not have_content("Warning: Orders summed quantity of item #{@giant.id} exceed inventory")
+    end
   end
 end
