@@ -17,6 +17,8 @@
   <% end %>
 </section>
 
+<h3>You have <%= @merchant.count_of_unfulfilled %> unfulfilled orders worth <%= number_to_currency(@merchant.revenue_for_unfulfilled) %></h3>
+
 <h3>To-Do List:</h3>
 <section class="items-placeholder-images">
   <% @merchant.items_with_placeholder_images.each do |item| %>
