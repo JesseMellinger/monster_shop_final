@@ -78,5 +78,20 @@ RSpec.describe 'Merchant Dashboard' do
 
       expect(current_path).to eq(discounts_path)
     end
+
+    it 'I see a list of items that are using placeholder images with a message that I should find an appropriate image and each item is a link to that items edit form' do
+      @giant.update!(image: "https://image.shutterstock.com/z/stock-photo-hand-drawing-cartoon-character-big-man-showing-double-thumb-up-1138960457.jpg")
+      @giant.reload
+
+      visit '/merchant'
+
+      within(".items-placeholder-images") do
+        expect(page).to have_content("Appropriate image needed for item #{@ogre.name}")
+        expect(page).to_not have_content("Appropriate image needed for item #{@giant.name}")
+        click_link("#{@ogre.name}")
+      end
+
+      expect(current_path).to eq(edit_merchant_item_path(@ogre.id))
+    end
   end
 end
