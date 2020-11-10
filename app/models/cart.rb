@@ -55,4 +55,14 @@ class Cart
   def limit_reached?(item_id)
     count_of(item_id) == Item.find(item_id).inventory
   end
+
+  def items_with_discounts
+    items = {}
+    self.contents.each do |item_id, quantity|
+      item = Item.find(item_id)
+      discount = item.find_max_discount(quantity)
+      items[item] = discount if item.find_max_discount(quantity)
+    end
+    items
+  end
 end
