@@ -6,6 +6,8 @@
 <%= link_to 'Create Discount', new_discount_path %>
 <%= link_to 'View Discount(s)', discounts_path %>
 
+<h3>You have <%= @merchant.count_of_unfulfilled %> unfulfilled orders worth <%= number_to_currency(@merchant.revenue_for_unfulfilled) %></h3>
+
 <section class="orders">
   <% @merchant.pending_orders.each do |order| %>
     <section id="order-<%= order.id %>">
@@ -13,6 +15,30 @@
       <p>Potential Revenue: <%= order.merchant_subtotal(@merchant.id) %></p>
       <p>Quantity of Items: <%= order.merchant_quantity(@merchant.id) %></p>
       <p>Created: <%= order.created_at %></p>
+      <% if @merchant.item_quantity_exceeds_inventory?(order) %>
+        <p>Warning: Item quantity on order <%= order.id %> exceeds current inventory count</p>
+      <% end %>
     </section>
+  <% end %>
+</section>
+
+<section class="items">
+    <% @merchant.items.each do |item| %>
+      <section id="item-<%= item.id %>">
+        <% if item.summed_quantity_exceeds_inventory? %>
+          <p>Warning: Orders summed quantity of item <%= item.id %> exceed inventory</p>
+        <% end %>
+      </section>
+    <% end %>
+<section>
+
+<h3>To-Do List:</h3>
+<section class="items-placeholder-images">
+  <% @merchant.items_with_placeholder_images.each do |item| %>
+    <ul>
+    <section id="item-<%= item.id %>">
+      <li>Appropriate image needed for item <%= link_to item.name, edit_merchant_item_path(item.id) %></li>
+    </section>
+    </ul>
   <% end %>
 </section>

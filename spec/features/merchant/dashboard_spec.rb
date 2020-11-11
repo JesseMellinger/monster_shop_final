@@ -78,5 +78,69 @@ RSpec.describe 'Merchant Dashboard' do
 
       expect(current_path).to eq(discounts_path)
     end
+
+    it 'I see a list of items that are using placeholder images with a message that I should find an appropriate image and each item is a link to that items edit form' do
+      @giant.update!(image: "https://image.shutterstock.com/z/stock-photo-hand-drawing-cartoon-character-big-man-showing-double-thumb-up-1138960457.jpg")
+      @giant.reload
+
+      visit '/merchant'
+
+      within(".items-placeholder-images") do
+        expect(page).to have_content("Appropriate image needed for item #{@ogre.name}")
+        expect(page).to_not have_content("Appropriate image needed for item #{@giant.name}")
+        click_link("#{@ogre.name}")
+      end
+
+      expect(current_path).to eq(edit_merchant_item_path(@ogre.id))
+    end
+
+    it 'I see a statistic about unfulfilled items and the revenue impact' do
+      visit '/merchant'
+
+      expect(page).to have_content("You have 2 unfulfilled orders worth $140.50")
+
+      @order_item_3.update(fulfilled: true)
+      @order_item_4.update(fulfilled: true)
+      @order_item_3.reload
+      @order_item_4.reload
+
+      visit '/merchant'
+
+      expect(page).to have_content("You have 0 unfulfilled orders worth $0.00")
+    end
+
+    it 'I see a warning if an item quantity for an order exceeds current inventory count' do
+      @order_item_3.update(quantity: 6)
+      @order_item_3.reload
+      @order_2.reload
+
+      visit '/merchant'
+
+      expect(page).to have_content("Warning: Item quantity on order #{@order_2.id} exceeds current inventory count")
+
+      @order_item_3.update(quantity: 5)
+      @order_item_3.reload
+      @order_2.reload
+
+      visit '/merchant'
+
+      expect(page).to_not have_content("Warning: Item quantity on order #{@order_2.id} exceeds current inventory count")
+    end
+
+    it 'if several orders exist for an item, and their summed quantity exceeds the Merchants inventory for that item, a warning message is shown' do
+      order_item_5 = @order_1.order_items.create!(item: @ogre, price: @ogre.price, quantity: 4, fulfilled: false)
+      @order_1.reload
+
+      visit '/merchant'
+
+      expect(page).to have_content("Warning: Orders summed quantity of item #{@ogre.id} exceed inventory")
+      expect(page).to_not have_content("Warning: Orders summed quantity of item #{@giant.id} exceed inventory")
+
+      leviathan = @merchant_1.items.create!(name: 'Leviathan', description: "I'm an Leviathan!", price: 20.50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 5 )
+
+      visit '/merchant'
+
+      expect(page).to_not have_content("Warning: Orders summed quantity of item #{leviathan.id} exceed inventory")
+    end
   end
 end

@@ -33,4 +33,8 @@ class Item < ApplicationRecord
   def find_max_discount(quantity)
     merchant.find_max_discount(quantity).first
   end
+
+  def summed_quantity_exceeds_inventory?
+    order_items.sum("quantity") > self.inventory
+  end
 end
