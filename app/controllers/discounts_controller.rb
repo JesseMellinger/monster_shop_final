@@ -15,8 +15,8 @@ class DiscountsController < Merchant::BaseController
       flash[:success] = "Discount created!"
       redirect_to '/merchant'
     else
-      flash[:error] = discount.errors.full_messages.to_sentence
-      redirect_to new_discount_path
+      generate_discount_flash(:error, discount)
+      redirect_to new_discount_url
     end
   end
 
@@ -33,8 +33,8 @@ class DiscountsController < Merchant::BaseController
     if @discount.update(discount_params)
       redirect_to "/merchant"
     else
-      flash[:error] = @discount.errors.full_messages.to_sentence
-      redirect_to edit_discount_path(@discount.id)
+      generate_discount_flash(:error, @discount)
+      redirect_to edit_discount_url(@discount.id)
     end
   end
 
