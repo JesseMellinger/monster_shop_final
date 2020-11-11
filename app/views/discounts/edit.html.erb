@@ -1,4 +1,4 @@
-<%= form_with model: @discount, url: "/discounts/#{@discount.id}", method: :patch do |f| %>
+<%= form_with model: @discount, url: "/discounts/#{@discount.id}", local: true, method: :patch do |f| %>
 
   <%= f.label :item_threshold %>
   <%= f.number_field :item_threshold %>

@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   end
 
   resources :discounts
-  
+
   resources :items, only: [:index, :show] do
     resources :reviews, only: [:new, :create]
   end
