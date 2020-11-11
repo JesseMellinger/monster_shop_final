@@ -105,7 +105,7 @@ RSpec.describe 'Merchant Dashboard' do
       @order_item_4.reload
 
       visit '/merchant'
-      
+
       expect(page).to have_content("You have 0 unfulfilled orders worth $0.00")
     end
 
@@ -135,6 +135,12 @@ RSpec.describe 'Merchant Dashboard' do
 
       expect(page).to have_content("Warning: Orders summed quantity of item #{@ogre.id} exceed inventory")
       expect(page).to_not have_content("Warning: Orders summed quantity of item #{@giant.id} exceed inventory")
+
+      leviathan = @merchant_1.items.create!(name: 'Leviathan', description: "I'm an Leviathan!", price: 20.50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 5 )
+
+      visit '/merchant'
+
+      expect(page).to_not have_content("Warning: Orders summed quantity of item #{leviathan.id} exceed inventory")
     end
   end
 end

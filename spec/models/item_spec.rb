@@ -54,9 +54,11 @@ RSpec.describe Item do
       order_item_1 = order_1.order_items.create!(item: @ogre, price: @ogre.price, quantity: 2, fulfilled: false)
       order_item_2 = order_1.order_items.create!(item: @giant, price: @giant.price, quantity: 2, fulfilled: false)
       order_item_3 = order_2.order_items.create!(item: @ogre, price: @ogre.price, quantity: 4, fulfilled: false)
+      leviathan = @megan.items.create!(name: 'Leviathan', description: "I'm an Leviathan!", price: 20.50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 5 )
 
       expect(@ogre.summed_quantity_exceeds_inventory?).to eq(true)
       expect(@giant.summed_quantity_exceeds_inventory?).to eq(false)
+      expect(leviathan.summed_quantity_exceeds_inventory?).to eq(false)
     end
   end
 
