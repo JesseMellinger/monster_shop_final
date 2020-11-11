@@ -1,7 +1,7 @@
 class DiscountsController < Merchant::BaseController
   def index
     @merchant = current_user.merchant
-    @discounts = Discount.preload(:merchant).to_a
+    @discounts = @merchant.get_discounts
   end
 
   def new
