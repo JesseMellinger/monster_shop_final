@@ -32,6 +32,7 @@ class DiscountsController < Merchant::BaseController
   def update
     @discount = Discount.find(params[:id])
     if @discount.update(discount_params)
+      flash[:success] = "Discount updated!"
       redirect_to "/merchant"
     else
       generate_discount_flash(:error, @discount)
@@ -42,6 +43,7 @@ class DiscountsController < Merchant::BaseController
   def destroy
     discount = Discount.find(params[:id])
     discount.destroy
+    flash[:success] = "Discount destroyed!"
     redirect_to discounts_path
   end
 
