@@ -32,6 +32,7 @@ RSpec.describe 'as a merchant employee' do
 
       expect(@discount_1.item_threshold).to eq(30)
       expect(@discount_1.value).to eq(15.0)
+      expect(page).to have_content("Discount updated!")
       expect(current_path).to eq('/merchant')
     end
 
