@@ -28,6 +28,7 @@ RSpec.describe 'as a merchant employee' do
         click_link("Delete Discount")
       end
 
+      expect(page).to have_content("Discount destroyed!")
       expect(current_path).to eq(discounts_path)
 
       @merchant_1.reload
