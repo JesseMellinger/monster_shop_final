@@ -23,7 +23,7 @@
 </section>
 
 <section class="items">
-    <% @merchant.items.each do |item| %>
+    <% @items.each do |item| %>
       <section id="item-<%= item.id %>">
         <% if item.summed_quantity_exceeds_inventory? %>
           <p>Warning: Orders summed quantity of item <%= item.id %> exceed inventory</p>
