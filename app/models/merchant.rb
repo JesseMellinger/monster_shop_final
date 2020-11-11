@@ -61,4 +61,12 @@ class Merchant < ApplicationRecord
       !order_item.fulfillable?
     end
   end
+
+  def get_items
+    Item.preload(:merchant).where('merchant_id = ?', self.id).to_a
+  end
+
+  def get_discounts
+    Discount.preload(:merchant).where('merchant_id = ?', self.id).to_a
+  end
 end

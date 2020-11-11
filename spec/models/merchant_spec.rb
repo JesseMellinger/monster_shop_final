@@ -102,5 +102,17 @@ RSpec.describe Merchant do
 
       expect(@megan.item_quantity_exceeds_inventory?(@order_1)).to eq(false)
     end
+
+    it '#get_items' do
+      expected = [@ogre, @giant]
+
+      expect(@megan.get_items).to eq(expected)
+    end
+
+    it '#get_discounts' do
+      expected = [@discount_1, @discount_2]
+
+      expect(@megan.get_discounts).to eq(expected)
+    end
   end
 end
