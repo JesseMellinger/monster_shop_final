@@ -1,6 +1,6 @@
 <h1>Discounts</h1>
 
-<% @merchant.discounts.each do |discount| %>
+<% @discounts.each do |discount| %>
   <section id='discount-<%= discount.id %>'>
     <p>Item Threshold: <%= discount.item_threshold %></p>
     <p>Discount Value: <%= discount.value %></p>

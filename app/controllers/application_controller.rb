@@ -43,4 +43,8 @@ class ApplicationController < ActionController::Base
       flash[validation] = "#{validation}: #{message}"
     end
   end
+
+  def generate_discount_flash(type, discount)
+    flash[type] = discount.errors.full_messages.to_sentence
+  end
 end
